@@ -66,8 +66,8 @@ async def create_office_record(office_soup, session):
 
     return {'name': name,
             'phone': phone,
-            'buy': buy_rate,
-            'sell': sell_rate,
+            'buy_rate': buy_rate,
+            'sell_rate': sell_rate,
             'time': time,
             'address': address,
             'longitude': 55.7558,
