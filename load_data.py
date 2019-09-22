@@ -12,7 +12,6 @@ async def run():
     response = requests.get(url)
     soup = BeautifulSoup(response.text, 'html.parser')
 
-    logger = logging.getLogger()
     tasks = []
 
     offices = get_offices(soup)
