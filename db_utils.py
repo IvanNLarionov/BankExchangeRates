@@ -13,8 +13,11 @@ def update_db(results):
             database="mvpdb",
             host="localhost",
             user="dbuser",
-            passwd="12345")
+            passwd="12345",
+            use_unicode=True,
+            charset='utf8')
 
+    # conn.set_charset_collation('utf-8')
     cursor = conn.cursor(buffered=True)
 
     _ = cursor.execute("SELECT MAX(load_id) from office_rates")
