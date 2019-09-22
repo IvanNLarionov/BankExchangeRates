@@ -1,4 +1,5 @@
 from flask import Flask
+from db_utils import load_last_data
 import json
 
 DATA_EXAMPLE = [
@@ -14,7 +15,7 @@ DATA_EXAMPLE = [
 
 
 def process_request():
-    return DATA_EXAMPLE
+    return load_last_data()
 
 
 app = Flask(__name__)
