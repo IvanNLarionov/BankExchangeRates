@@ -1,5 +1,6 @@
 import mysql.connector
-
+import logging
+logger = logging.getLogger()
 
 def parse_row(row):
 
@@ -24,6 +25,7 @@ def insert_row(object, cursor):
         f""" VALUES ({object['load_id']}, '{object['name']}', '{object['phone']}', '{object['time']}', """ \
         f"""{object['buy_rate']}, {object['sell_rate']}, '{object['address']}', {object['longitude']}, {object['latitude']})"""
     cursor.execute(sql)
+    logger.info(f"inserted object {object}")
 
 
 def update_db(results):
@@ -35,12 +37,11 @@ def update_db(results):
             use_unicode=True,
             charset='utf8')
 
-    # conn.set_charset_collation('utf-8')
     cursor = conn.cursor(buffered=True)
 
     _ = cursor.execute("SELECT MAX(load_id) from office_rates")
     last_load_id = cursor.fetchone()[0]
-
+    logger.info(f"last load id is {last_load_id}")
     for item in results:
         item['load_id'] = last_load_id + 1
         insert_row(item, cursor)

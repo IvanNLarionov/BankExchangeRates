@@ -4,6 +4,7 @@ import requests
 
 from db_utils import update_db
 from scrape_utils import *
+import logging
 
 
 async def run():
@@ -11,6 +12,7 @@ async def run():
     response = requests.get(url)
     soup = BeautifulSoup(response.text, 'html.parser')
 
+    logger = logging.getLogger()
     tasks = []
 
     offices = get_offices(soup)
@@ -25,8 +27,6 @@ async def run():
         print(results)
 
     update_db(results)
-
-
     return results
 
 
