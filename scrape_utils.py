@@ -79,5 +79,5 @@ async def create_office_record(office_soup, session):
             'sell_rate': sell_rate,
             'time': time,
             'address': address,
-            'latitude': coordinates[0],
-            'longitude': coordinates[1]}
+            'latitude': float(coordinates[0]),
+            'longitude': float(coordinates[1])}
