@@ -1,4 +1,5 @@
 import logging
+from yandex_geocoder import Client
 
 from bs4 import BeautifulSoup
 
@@ -64,11 +65,19 @@ async def create_office_record(office_soup, session):
     inner_ref = get_office_ref(office_soup)
     address = await fetch_inner(inner_ref, session)
 
+    address_for_coordinates = "Москва " + address
+    try:
+        coordinates = Client.coordinates(address_for_coordinates)
+    except Exception as e:
+        print(f"Failed fetching coordinates for address {address_for_coordinates}")
+        print(e.args)
+        coordinates = ('NaN', 'NaN')
+
     return {'name': name,
             'phone': phone,
             'buy_rate': buy_rate,
             'sell_rate': sell_rate,
             'time': time,
             'address': address,
-            'longitude': 55.7558,
-            'latitude': 37.6273}
+            'latitude': coordinates[0],
+            'longitude': coordinates[1]}

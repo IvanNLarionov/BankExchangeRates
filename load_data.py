@@ -1,7 +1,6 @@
 import asyncio
 import aiohttp
 import requests
-
 from db_utils import update_db
 from scrape_utils import *
 import logging
@@ -15,7 +14,6 @@ async def run():
     tasks = []
 
     offices = get_offices(soup)
-
     async with aiohttp.ClientSession() as session:
         for office in offices:
             task = asyncio.ensure_future(create_office_record(office, session))
