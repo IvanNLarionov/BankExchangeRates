@@ -22,7 +22,7 @@ async def run():
         results = await asyncio.gather(*tasks)
         print(len(results))
         print(results)
-
+    results = [item for item in results if item['latitude'] != 'NaN']
     update_db(results)
     return results
 
