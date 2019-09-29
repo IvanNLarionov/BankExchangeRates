@@ -15,13 +15,14 @@ async def run():
 
     offices = get_offices(soup)
     async with aiohttp.ClientSession() as session:
-        for office in offices:
-            task = asyncio.ensure_future(create_office_record(office, session))
-            tasks.append(task)
+        async with aiohttp.ClientSession() as yandex_session:
+            for office in offices:
+                task = asyncio.ensure_future(create_office_record(office, session, yandex_session))
+                tasks.append(task)
 
-        results = await asyncio.gather(*tasks)
-        print(len(results))
-        print(results)
+            results = await asyncio.gather(*tasks)
+            print(len(results))
+            print(results)
     results = [item for item in results if item['latitude'] != 'NaN']
     update_db(results)
     return results

@@ -1,5 +1,6 @@
+import json
 import logging
-from yandex_geocoder import Client
+import aiohttp
 
 from bs4 import BeautifulSoup
 
@@ -11,6 +12,9 @@ PHONE_CLASS = "quote__office__one__phone"
 TIME_CLASS = "quote__office__cell quote__office__one__time"
 
 BASE_URL = 'https://cash.rbc.ru'
+
+API_KEY = "32566061-1bdc-4f0a-80a5-d194c236c20a"
+YANDEX_URL = "https://geocode-maps.yandex.ru/1.x"
 
 
 def get_offices(soup):
@@ -42,7 +46,6 @@ def get_record_time(office_soup):
 
 
 async def fetch_inner(office_ref, session):
-
     async with session.get(office_ref) as response:
         text = await response.text()
         try:
@@ -55,7 +58,28 @@ async def fetch_inner(office_ref, session):
             return None
 
 
-async def create_office_record(office_soup, session):
+async def fetch_geoloc(address, yandex_session):
+    url = YANDEX_URL
+    data = {'geocode': address,
+            'apikey': API_KEY,
+            'format': 'json',
+            "rspn": 1,
+            "bbox": "35.5, 54.5~38.5,57.5"
+            }
+
+    async with yandex_session.get(url=url, params=data) as response:
+        res = await response.json()
+        results = res['response']['GeoObjectCollection']['featureMember']
+        if len(results) > 1:
+            print("Yandex geoloc received multiple results")
+            print(results)
+        location = results[0]['GeoObject']['Point']['pos']
+        location = str.split(location, " ")
+        location = [float(item) for item in location]
+    return location
+
+
+async def create_office_record(office_soup, session, yandex_session):
     name = get_office_name(office_soup)
     phone = get_phone(office_soup)
     buy_rate = get_buy_rate(office_soup)
@@ -67,7 +91,7 @@ async def create_office_record(office_soup, session):
 
     address_for_coordinates = "Москва " + address
     try:
-        coordinates = Client.coordinates(address_for_coordinates)
+        coordinates = await fetch_geoloc(address_for_coordinates, yandex_session)
     except Exception as e:
         print(f"Failed fetching coordinates for address {address_for_coordinates}")
         print(e.args)
