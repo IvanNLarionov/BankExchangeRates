@@ -1,5 +1,6 @@
 import mysql.connector
 import logging
+import pandas as pd
 logger = logging.getLogger()
 
 def parse_row(row):
@@ -8,9 +9,8 @@ def parse_row(row):
     # (7, 2, datetime.datetime(2019, 9, 22, 19, 44, 1), 'АКБ Трансстройбанк ОКВКУ Братиславская',
     #  '+7 495 786-37-73 доб. 562', '20:43', 64.4, 63.8, 'ул. Братиславская, д. 14', 55.7558, 37.6273)
     #
-
     return {
-        'load_timestamp': row[2],
+        'load_timestamp': int(pd.to_datetime(row[2])),
         'name': row[3],
         'phone': row[4],
         'time': row[5],
