@@ -95,7 +95,7 @@ async def create_office_record(office_soup, session, yandex_session):
     except Exception as e:
         print(f"Failed fetching coordinates for address {address_for_coordinates}")
         print(e.args)
-        coordinates = ('NaN', 'NaN')
+        coordinates = ('nan', 'nan')
 
     return {'name': name,
             'phone': phone,
