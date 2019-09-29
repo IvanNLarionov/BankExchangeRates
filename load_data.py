@@ -21,9 +21,12 @@ async def run():
                 tasks.append(task)
 
             results = await asyncio.gather(*tasks)
-            print(len(results))
-            print(results)
     results = [item for item in results if item['latitude'] != 'nan' and item['longitude'] != 'nan']
+    for result in results:
+        result['latitude'] = float(result['latitude'])
+        result['longitude'] = float(result['longitude'])
+    print(len(results))
+    print(results)
     update_db(results)
     return results
 
