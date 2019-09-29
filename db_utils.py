@@ -10,6 +10,7 @@ def parse_row(row):
     #
 
     return {
+        'load_timestamp': row[2],
         'name': row[3],
         'phone': row[4],
         'time': row[5],
@@ -68,4 +69,26 @@ def load_last_data():
         res.append(parse_row(row))
     conn.close()
     return res
+
+
+def load_last_record_for_each_bank():
+    conn = mysql.connector.connect(
+        database="mvpdb",
+        host="localhost",
+        user="dbuser",
+        passwd="12345",
+        use_unicode=True,
+        charset='utf8')
+
+    # conn.set_charset_collation('utf-8')
+    cursor = conn.cursor(buffered=True)
+
+    _ = cursor.execute("select * from office_rates where id in (SELECT MAX(id) from office_rates group_by office_name)")
+
+    res = []
+    for row in cursor:
+        res.append(parse_row(row))
+    conn.close()
+    return res
+
 

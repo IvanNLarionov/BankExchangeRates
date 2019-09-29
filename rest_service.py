@@ -1,5 +1,5 @@
 from flask import Flask
-from db_utils import load_last_data
+from db_utils import load_last_data, load_last_record_for_each_bank
 import json
 
 DATA_EXAMPLE = [
@@ -15,7 +15,18 @@ DATA_EXAMPLE = [
 
 
 def process_request():
-    return load_last_data()
+    all_data = load_last_record_for_each_bank()
+    last_data = load_last_data()
+
+    last_data_names = [item['name'] for item in last_data]
+
+    for item in all_data:
+        if item['name'] in last_data_names:
+            item['is_open'] = True
+        else:
+            item['is_open'] = False
+
+    return all_data
 
 
 app = Flask(__name__)
