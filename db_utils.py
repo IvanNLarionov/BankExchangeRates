@@ -83,7 +83,7 @@ def load_last_record_for_each_bank():
     # conn.set_charset_collation('utf-8')
     cursor = conn.cursor(buffered=True)
 
-    _ = cursor.execute("select * from office_rates where id in (SELECT MAX(id) from office_rates group_by office_name)")
+    _ = cursor.execute("select * from office_rates where id in (SELECT MAX(id) from office_rates group by office_name)")
 
     res = []
     for row in cursor:
