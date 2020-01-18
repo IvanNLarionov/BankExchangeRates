@@ -49,7 +49,7 @@ def update_db(results, city, currency):
 
     cursor = conn.cursor(buffered=True)
 
-    _ = cursor.execute(f"""SELECT MAX(load_id) from {TABLE_NAME} where city = '{city}' and currency ='{currency}'""")
+    _ = cursor.execute(f"""SELECT MAX(load_id) from {TABLE_NAME} where city = {city} and currency ={currency}""")
     last_load_id = cursor.fetchone()[0]
     print(f"last load id is {last_load_id}")
     if last_load_id:
@@ -76,7 +76,7 @@ def load_last_data(city, currency):
     # conn.set_charset_collation('utf-8')
     cursor = conn.cursor(buffered=True)
     query = f"""SELECT * from {TABLE_NAME} 
-    where load_id = (SELECT MAX(load_id) from {TABLE_NAME} and city = '{city}' and currency = '{currency}'"""
+    where load_id = (SELECT MAX(load_id) from {TABLE_NAME} and city = {city} and currency = {currency}"""
 
     _ = cursor.execute(query)
     res = []
@@ -101,7 +101,7 @@ def load_last_record_for_each_bank(city, currency):
     query = f"""select * from {TABLE_NAME} 
     where 
         id in (SELECT MAX(id) from {TABLE_NAME}
-         where city = '{city}' and currency='{currency}' group by office_name)"""
+         where city = {city} and currency={currency} group by office_name)"""
     _ = cursor.execute(query)
 
     res = []
