@@ -52,8 +52,12 @@ def update_db(results, city, currency):
     _ = cursor.execute(f"""SELECT MAX(load_id) from {TABLE_NAME} where city = '{city}' and currency ='{currency}'""")
     last_load_id = cursor.fetchone()[0]
     print(f"last load id is {last_load_id}")
+    if last_load_id:
+        new_load_id = last_load_id + 1
+    else:
+        new_load_id = 1
     for item in results:
-        item['load_id'] = last_load_id + 1
+        item['load_id'] = new_load_id
         insert_row(item, cursor)
 
     conn.commit()
