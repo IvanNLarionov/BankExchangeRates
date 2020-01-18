@@ -9,7 +9,7 @@ import logging
 async def run(city, currency):
 
     url = 'https://cash.rbc.ru/cash/'
-    payload = {'city': city, 'currency': currency}
+    payload = {'city': city, 'currency': currency, 'amount': 1000}
     response = requests.get(url, params=payload)
     soup = BeautifulSoup(response.text, 'html.parser')
 
