@@ -15,17 +15,21 @@ DATA_EXAMPLE = [
 
 
 def process_request():
-    all_data = load_last_record_for_each_bank(city, currency)
-    last_data = load_last_data(city, currency)
+    all_data = []
+    for city in (1, 2):
+        for currency in (2, 3):
+            data = load_last_record_for_each_bank(city, currency)
+            last_data = load_last_data(city, currency)
 
-    last_data_names = [item['name'] for item in last_data]
+            last_data_names = [item['name'] for item in last_data]
 
-    for item in all_data:
-        if item['name'] in last_data_names:
-            item['is_open'] = True
-        else:
-            item['is_open'] = False
+            for item in data:
+                if item['name'] in last_data_names:
+                    item['is_open'] = True
+                else:
+                    item['is_open'] = False
 
+            all_data.extend(data)
     return all_data
 
 

@@ -75,8 +75,8 @@ def load_last_data(city, currency):
 
     # conn.set_charset_collation('utf-8')
     cursor = conn.cursor(buffered=True)
-    query = f"""SELECT * from {TABLE_NAME} where load_id = (SELECT MAX(load_id) from {TABLE_NAME}) and city = '{city}'
-        and currency = '{currency}'"""
+    query = f"""SELECT * from {TABLE_NAME} 
+    where load_id = (SELECT MAX(load_id) from {TABLE_NAME} and city = '{city}' and currency = '{currency}'"""
 
     _ = cursor.execute(query)
     res = []
@@ -100,8 +100,8 @@ def load_last_record_for_each_bank(city, currency):
 
     query = f"""select * from {TABLE_NAME} 
     where 
-        id in (SELECT MAX(id) from {TABLE_NAME} group by office_name)
-        and city = '{city}' and currency = '{currency}'"""
+        id in (SELECT MAX(id) from {TABLE_NAME}
+         where city = '{city}' and currency='{currency}' group by office_name)"""
     _ = cursor.execute(query)
 
     res = []
