@@ -58,13 +58,25 @@ async def fetch_inner(office_ref, session):
             return None
 
 
-async def fetch_geoloc(address, yandex_session):
+async def fetch_geoloc(address, city, yandex_session):
     url = YANDEX_URL
-    data = {'geocode': address,
+
+    if city == 1:
+        city_name = "Москва"
+        bbox = "35.5,54.5~38.5,57.5"
+    elif city == 2:
+        city_name = "Санкт-Петербург"
+        bbox = "28.8,58.43~31.8,61.43"
+    else:
+        raise ValueError("Working with moscow and spb currently only")
+
+    address_for_geocode = city_name + ' ' + address
+
+    data = {'geocode': address_for_geocode,
             'apikey': API_KEY,
             'format': 'json',
             "rspn": 1,
-            "bbox": "35.5, 54.5~38.5,57.5"
+            "bbox": bbox,
             }
 
     async with yandex_session.get(url=url, params=data) as response:
@@ -79,7 +91,7 @@ async def fetch_geoloc(address, yandex_session):
     return location
 
 
-async def create_office_record(office_soup, session, yandex_session):
+async def create_office_record(office_soup, city, currency, session, yandex_session):
     name = get_office_name(office_soup)
     phone = get_phone(office_soup)
     buy_rate = get_buy_rate(office_soup)
@@ -88,12 +100,10 @@ async def create_office_record(office_soup, session, yandex_session):
 
     inner_ref = get_office_ref(office_soup)
     address = await fetch_inner(inner_ref, session)
-
-    address_for_coordinates = "Москва " + address
     try:
-        coordinates = await fetch_geoloc(address_for_coordinates, yandex_session)
+        coordinates = await fetch_geoloc(address, city, yandex_session)
     except Exception as e:
-        print(f"Failed fetching coordinates for address {address_for_coordinates}")
+        print(f"Failed fetching coordinates for address {address} in city {city}")
         print(e.args)
         coordinates = ('nan', 'nan')
 
@@ -103,5 +113,7 @@ async def create_office_record(office_soup, session, yandex_session):
             'sell_rate': sell_rate,
             'time': time,
             'address': address,
+            'city': city,
+            'currency': currency,
             'latitude': coordinates[0],
             'longitude': coordinates[1]}

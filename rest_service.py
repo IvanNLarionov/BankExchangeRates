@@ -15,8 +15,8 @@ DATA_EXAMPLE = [
 
 
 def process_request():
-    all_data = load_last_record_for_each_bank()
-    last_data = load_last_data()
+    all_data = load_last_record_for_each_bank(city, currency)
+    last_data = load_last_data(city, currency)
 
     last_data_names = [item['name'] for item in last_data]
 
