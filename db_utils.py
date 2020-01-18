@@ -76,7 +76,7 @@ def load_last_data(city, currency):
     # conn.set_charset_collation('utf-8')
     cursor = conn.cursor(buffered=True)
     query = f"""SELECT * from {TABLE_NAME} 
-    where load_id = (SELECT MAX(load_id) from {TABLE_NAME} and city = {city} and currency = {currency}"""
+    where load_id = (SELECT MAX(load_id) from {TABLE_NAME} and city = {city} and currency = {currency})"""
 
     _ = cursor.execute(query)
     res = []
