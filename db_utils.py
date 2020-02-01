@@ -12,7 +12,7 @@ def parse_row(row):
     # (7, 2, datetime.datetime(2019, 9, 22, 19, 44, 1), 'АКБ Трансстройбанк ОКВКУ Братиславская',
     #  '+7 495 786-37-73 доб. 562', '20:43', 64.4, 63.8, 'ул. Братиславская, д. 14', 55.7558, 37.6273)
 
-    dt = datetime.datetime.strptime(row[2], '%Y-%m-%d %H:%M:%S')
+    dt = row[2]
     local_tz = datetime.datetime.now(datetime.timezone(datetime.timedelta(0))).astimezone().tzinfo
     dt = dt.replace(tzinfo=local_tz).astimezone(pytz.utc)
     return {
