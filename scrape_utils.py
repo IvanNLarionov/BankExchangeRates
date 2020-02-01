@@ -67,6 +67,21 @@ async def fetch_geoloc(address, city, yandex_session):
     elif city == 2:
         city_name = "Санкт-Петербург"
         bbox = "28.8,58.43~31.8,61.43"
+    elif city == 3:
+        city_name = "Ростов-на-Дону"
+        bbox = "38.3,46.2~43.9,49.8"
+    elif city == 4:
+        city_name = "Северо-Западный Федеральный Округ"
+        bbox = "19.56,55.72~66.04,81.75"
+    elif city == 5:
+        city_name = "Краснодарский край"
+        bbox = "36.54,43.23~41.66,47.01"
+    elif city == 6:
+        city_name = "Башкортостан"
+        bbox = "53.41,51.55~59.98,56.43"
+    elif city == 7:
+        city_name = "Татарстан"
+        bbox = "47.27,54.32~54.22,56.65"
     else:
         raise ValueError("Working with moscow and spb currently only")
 

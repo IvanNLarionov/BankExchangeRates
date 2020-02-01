@@ -41,7 +41,7 @@ async def run(city, currency):
 if __name__ == "__main__":
     loop = asyncio.get_event_loop()
 
-    for city in (1, 2):
+    for city in (1, 2, 3, 4, 5, 6, 7):
         for currency in (2, 3):
             loop.run_until_complete(run(city=city, currency=currency))
 
