@@ -2,7 +2,8 @@ import mysql.connector
 import logging
 import pandas as pd
 logger = logging.getLogger()
-
+import datetime
+import pytz
 
 TABLE_NAME = "office_rates"
 
@@ -10,10 +11,13 @@ def parse_row(row):
     # id, load_id, timestamp, name, phone, time, buy, sell, address, longitude, latitude
     # (7, 2, datetime.datetime(2019, 9, 22, 19, 44, 1), 'АКБ Трансстройбанк ОКВКУ Братиславская',
     #  '+7 495 786-37-73 доб. 562', '20:43', 64.4, 63.8, 'ул. Братиславская, д. 14', 55.7558, 37.6273)
-    #
+
+    dt = datetime.datetime.strptime(row[2], '%Y-%m-%d %H:%M:%S')
+    local_tz = datetime.datetime.now(datetime.timezone(datetime.timedelta(0))).astimezone().tzinfo
+    dt = dt.replace(tzinfo=local_tz).astimezone(pytz.utc)
     return {
         'load_id': row[1],
-        'load_timestamp': pd.to_datetime(row[2]).timestamp(),
+        'load_timestamp': dt.timestamp(),
         'name': row[3],
         'phone': row[4],
         'time': row[5],
